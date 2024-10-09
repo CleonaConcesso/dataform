@@ -8,15 +8,18 @@ steps:
         npm install -g dataform
         npm install
 
-  # Run the Dataform tests
+  # Run the Dataform models
   - name: 'node:14'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        dataform run  # This runs the Dataform models  
+        dataform run  # This runs the Dataform models
 
 timeout: '1200s'  # Adjust timeout as needed
 
 substitutions:
   _DATAFORM_PROJECT: 'demo-workspace'
+
+options:
+  logging: CLOUD_LOGGING_ONLY  # Set logging to only Cloud Logging

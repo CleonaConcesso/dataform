@@ -1,0 +1,22 @@
+steps:
+  # Install Node.js and Dataform
+  - name: 'node:14'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        npm install -g dataform
+        npm install
+
+  # Run the Dataform tests
+  - name: 'node:14'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        dataform run  # This runs the Dataform models  
+
+timeout: '1200s'  # Adjust timeout as needed
+
+substitutions:
+  _DATAFORM_PROJECT: 'demo-workspace'

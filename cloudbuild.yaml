@@ -1,4 +1,15 @@
 steps:
+  # Remove existing node_modules if they exist
+  - name: 'node:14'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        if [ -d "/workspace/node_modules" ]; then
+          rm -rf /workspace/node_modules
+          echo "Removed existing node_modules."
+        fi
+
   # Install Node.js and Dataform locally
   - name: 'node:14'
     entrypoint: 'bash'
@@ -19,6 +30,8 @@ timeout: '1200s'  # Adjust timeout as needed
 
 substitutions:
   _DATAFORM_PROJECT: 'demo-workspace'
+options:
+  logging: CLOUD_LOGGING_ONLY
 
 options:
   logging: CLOUD_LOGGING_ONLY  # Set logging to only Cloud Logging

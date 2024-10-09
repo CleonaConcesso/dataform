@@ -1,22 +1,20 @@
 steps:
-  # Remove existing node_modules if they exist
-  - name: 'node:14'
+  # Create a clean temporary directory
+  - name: 'gcr.io/cloud-builders/gcloud'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        if [ -d "/workspace/node_modules" ]; then
-          rm -rf /workspace/node_modules
-          echo "Removed existing node_modules."
-        fi
+        mkdir -p /workspace/temp_dir && cd /workspace/temp_dir
 
-  # Install Node.js and Dataform locally
+  # Install Node.js and Dataform in the temporary directory
   - name: 'node:14'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
         npm install @dataform/cli && echo "Dataform installed successfully." || echo "Dataform installation failed."
+        cd /workspace/temp_dir
 
   # Run the Dataform models
   - name: 'node:14'
@@ -24,7 +22,7 @@ steps:
     args:
       - '-c'
       - |
-        npx dataform run  # This runs the Dataform models
+        cd /workspace/temp_dir && npx dataform run  # This runs the Dataform models
 
 timeout: '1200s'  # Adjust timeout as needed
 
@@ -32,6 +30,3 @@ substitutions:
   _DATAFORM_PROJECT: 'demo-workspace'
 options:
   logging: CLOUD_LOGGING_ONLY
-
-options:
-  logging: CLOUD_LOGGING_ONLY  # Set logging to only Cloud Logging

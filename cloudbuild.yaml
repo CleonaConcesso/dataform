@@ -1,11 +1,11 @@
 steps:
-  # Install Node.js and Dataform
+  # Install Node.js and Dataform locally
   - name: 'node:14'
     entrypoint: 'bash'
     args:
       - '-c'
       - |
-        npm install -g @dataform/cli && npm install && echo "Dataform installed successfully." || echo "Dataform installation failed."
+        npm install @dataform/cli && echo "Dataform installed successfully." || echo "Dataform installation failed."
 
   # Run the Dataform models
   - name: 'node:14'
@@ -13,7 +13,7 @@ steps:
     args:
       - '-c'
       - |
-        $(npm bin -g)/dataform run  # This runs the Dataform models
+        npx dataform run  # This runs the Dataform models
 
 timeout: '1200s'  # Adjust timeout as needed
 

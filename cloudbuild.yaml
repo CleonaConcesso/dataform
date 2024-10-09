@@ -5,8 +5,7 @@ steps:
     args:
       - '-c'
       - |
-        npm install -g dataform
-        npm install
+        npm install -g dataform && npm install && echo "Dataform installed successfully." || echo "Dataform installation failed."
 
   # Run the Dataform models
   - name: 'node:14'

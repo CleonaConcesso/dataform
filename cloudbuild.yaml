@@ -5,7 +5,15 @@ steps:
     args:
       - '-c'
       - |
-        mkdir -p /workspace/temp_dir && cd /workspace/temp_dir
+        mkdir -p /workspace/temp_dir
+
+  # Copy Dataform project files into the temporary directory
+  - name: 'gcr.io/cloud-builders/gcloud'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        cp -r /workspace/* /workspace/temp_dir/
 
   # Install Node.js and Dataform in the temporary directory
   - name: 'node:14'
@@ -13,8 +21,8 @@ steps:
     args:
       - '-c'
       - |
-        npm install @dataform/cli && echo "Dataform installed successfully." || echo "Dataform installation failed."
         cd /workspace/temp_dir
+        npm install @dataform/cli && echo "Dataform installed successfully." || echo "Dataform installation failed."
 
   # Run the Dataform models
   - name: 'node:14'

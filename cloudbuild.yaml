@@ -9,8 +9,7 @@ steps:
         dataform install
         dataform compile
 
-
-  # Step 3: Dataform Dry Run - simulates the execution of SQLX queries
+  # Step 2: Dataform Dry Run - simulates the execution of SQLX queries
   - name: 'dataformco/dataform:latest'
     entrypoint: ''
     args:
@@ -20,7 +19,7 @@ steps:
         dataform install
         dataform run --dry-run
 
-  # Step 4: Dataform Run - deploys the changes to BigQuery (e.g., tables and views)
+  # Step 3: Dataform Run - deploys the changes to BigQuery (e.g., tables and views)
   - name: 'dataformco/dataform:latest'
     entrypoint: ''
     args:
@@ -30,5 +29,8 @@ steps:
         dataform install
         dataform run
 
-timeout: '1200s'  # Timeout after 20 minute
+timeout: '1200s'  # Timeout after 20 minutes
+
+options:
+  logging: CLOUD_LOGGING_ONLY 
 

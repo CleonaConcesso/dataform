@@ -1,40 +1,33 @@
 steps:
-  # Create a clean temporary directory
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
+  # Step 1: Dataform Compile - ensures SQLX files have no syntax errors
+  - name: 'dataformco/dataform:latest'
+    entrypoint: ''
     args:
+      - bash
       - '-c'
       - |
-        mkdir -p /workspace/temp_dir
+        dataform install
+        dataform compile
 
-  # Copy Dataform project files into the temporary directory (excluding temp_dir)
-  - name: 'gcr.io/cloud-builders/gcloud'
-    entrypoint: 'bash'
+
+  # Step 3: Dataform Dry Run - simulates the execution of SQLX queries
+  - name: 'dataformco/dataform:latest'
+    entrypoint: ''
     args:
+      - bash
       - '-c'
       - |
-        cp -r /workspace/* /workspace/temp_dir/ --exclude /workspace/temp_dir
+        dataform install
+        dataform run --dry-run
 
-  # Install Node.js and Dataform in the temporary directory
-  - name: 'node:14'
-    entrypoint: 'bash'
+  # Step 4: Dataform Run - deploys the changes to BigQuery (e.g., tables and views)
+  - name: 'dataformco/dataform:latest'
+    entrypoint: ''
     args:
+      - bash
       - '-c'
       - |
-        cd /workspace/temp_dir
-        npm install @dataform/cli && echo "Dataform installed successfully." || echo "Dataform installation failed."
+        dataform install
+        dataform run
 
-  # Run the Dataform models
-  - name: 'node:14'
-    entrypoint: 'bash'
-    args:
-      - '-c'
-      - |
-        cd /workspace/temp_dir && npx dataform run  # This runs the Dataform models
-
-timeout: '1200s'  # Adjust timeout as needed
-
-substitutions:
-  _DATAFORM_PROJECT: 'demo-workspace'
-options:
-  logging: CLOUD_LOGGING_ONLY
+timeout: '1200s'  # Timeout after 20 minute

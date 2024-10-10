@@ -1,22 +1,33 @@
 steps:
-  # Install Node.js and Dataform
-  - name: 'node:14'
-    entrypoint: 'bash'
+  # Step 1: Dataform Compile - ensures SQLX files have no syntax errors
+  - name: 'dataformco/dataform:latest'
+    entrypoint: ''
     args:
+      - bash
       - '-c'
       - |
-        npm install -g dataform
-        npm install
+        dataform install
+        dataform compile
 
-  # Run the Dataform tests
-  - name: 'node:14'
-    entrypoint: 'bash'
+
+  # Step 3: Dataform Dry Run - simulates the execution of SQLX queries
+  - name: 'dataformco/dataform:latest'
+    entrypoint: ''
     args:
+      - bash
       - '-c'
       - |
-        dataform run  # This runs the Dataform models  
+        dataform install
+        dataform run --dry-run
 
-timeout: '1200s'  # Adjust timeout as needed
+  # Step 4: Dataform Run - deploys the changes to BigQuery (e.g., tables and views)
+  - name: 'dataformco/dataform:latest'
+    entrypoint: ''
+    args:
+      - bash
+      - '-c'
+      - |
+        dataform install
+        dataform run
 
-substitutions:
-  _DATAFORM_PROJECT: 'demo-workspace'
+timeout: '1200s'  # Timeout after 20 minute

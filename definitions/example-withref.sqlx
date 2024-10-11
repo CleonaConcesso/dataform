@@ -1,3 +1,4 @@
+
 config { 
     type: "table",
     tags: ["core", "hourly"]
@@ -20,3 +21,4 @@ FROM
   ${ref("example")}
 GROUP BY 
   1, 2, 3
+

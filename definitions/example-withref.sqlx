@@ -1,0 +1,22 @@
+config { 
+    type: "table",
+    tags: ["core", "hourly"]
+}
+
+SELECT 
+  country AS country,
+  CASE 
+    WHEN country IN ('GB', 'FR') THEN 'Europe'
+    WHEN country = 'US' THEN 'North America'
+    WHEN country = 'TH' THEN 'Asia'
+    WHEN country = 'NG' THEN 'Africa'
+    ELSE 'Other'
+  END AS country_group,
+  device_type AS device_type,
+  SUM(revenue) AS revenue,
+  SUM(pageviews) AS pageviews,
+  SUM(sessions) AS sessions
+FROM 
+  ${ref("example")}
+GROUP BY 
+  1, 2, 3

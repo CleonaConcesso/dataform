@@ -21,3 +21,6 @@ UNION ALL
 SELECT
     "kiwis" AS fruit,
     3 AS count
+SELECT
+    "grapes" AS fruit,
+    3 AS count
